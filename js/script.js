@@ -13,10 +13,10 @@ const remainingGuessesSpan = document.querySelector(".remaining span");
 // The empty paragraph where messages will appear when the player guesses a letter.
 const message = document.querySelector(".message");
 // The hidden button that will appear prompting the player to play again.
-const playAgainButton = document.querySelector("play-again");
+const playAgainButton = document.querySelector(".play-again");
 
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 // async fetch function, obtain random word
@@ -127,6 +127,7 @@ const guessCount = function (guess) {
 
    if (remainingGuesses === 0) {
     message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>`;
+    startOver();
    } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
    } else {
@@ -139,5 +140,33 @@ const ifWon = function () {
   if (wordInProgress.innerText === word.toUpperCase()) {
     message.classList.add("win");
     message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>.`;
+
+    startOver();
   }
 }
+
+// Hide and show elements
+const startOver = function () {
+  guessLetterButton.classList.add("hide");
+  remainingGuessesElement.classList.add("hide");
+  guessedLettersElement.classList.add("hide");
+  playAgainButton.classList.remove("hide")
+};
+
+// Add click event to play again button
+playAgainButton.addEventListener("click", function () {
+  //reset original values
+  message.classList.remove("win");
+  guessedLetters = [];
+  remainingGuesses = 8;
+  remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+  message.innertText = "";
+  guessedLettersElement.innerHTML = "";
+  //get new word
+  getWord();
+  // hide play again button, show guess UI elements
+  guessLetterButton.classList.remove("hide");
+  remainingGuessesElement.classList.remove("hide");
+  guessedLettersElement.classList.remove("hide");
+  playAgainButton.classList.add("hide")
+});
