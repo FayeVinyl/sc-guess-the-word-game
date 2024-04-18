@@ -19,8 +19,10 @@ const getWord = async function () {
   word = wordArray[randomIndex].trim();
   placeholder(word);
 }
-getWord();
 
+//Fire off the game
+getWord();
+//Display symbols as placeholders for the chosen word's letters
 const placeholder = function (word) {
   const placeholderLetters = [];
   for (const letter of word) {
@@ -29,24 +31,21 @@ const placeholder = function (word) {
   wordInProgress.innerText = placeholderLetters.join("");
 }
 
+
 guessLetterButton.addEventListener("click", function (e) {
   e.preventDefault();
   message.innerText = "";
-
   const guess = letterInput.value;
-
   const goodGuess = validateInput(guess);
 
   if (goodGuess) {
     makeGuess(guess);
   }
 
-
   letterInput.value = "";
 });
 
-
-
+//validate input
 const validateInput = function (input) {
   const acceptedLetter = /[a-zA-Z]/;
   if (input.length === 0) {
@@ -66,7 +65,6 @@ const makeGuess = function(guess) {
     message.innerText = "You already guessed that letter, try again";
   } else {
     guessedLetters.push(guess);
-    console.log(guessedLetters);
     guessCount(guess);
     displayGuessedLetters();
     updateWordInProgress(guessedLetters);
@@ -93,7 +91,6 @@ const updateWordInProgress = function (guessedLetters) {
       updateLetters.push("●")
     }
   }
-  console.log(updateLetters);
   wordInProgress.innerText = updateLetters.join("");
   ifWon();
 }
@@ -118,9 +115,9 @@ const guessCount = function (guess) {
 };
 
 const ifWon = function () {
-  if (wordInProgress.innerText === word.toUpperCase()) {
+  if (word.toUpperCase() === wordInProgress.innerText) {
     message.classList.add("win");
-    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>.`;
+    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
 
     startOver();
   }
@@ -130,19 +127,20 @@ const startOver = function () {
   guessLetterButton.classList.add("hide");
   remainingGuessesElement.classList.add("hide");
   guessedLettersElement.classList.add("hide");
-  playAgainButton.classList.remove("hide")
+  playAgainButton.classList.remove("hide");
 };
 
+//reset all original values and grab new word
 playAgainButton.addEventListener("click", function () {
   message.classList.remove("win");
   guessedLetters = [];
   remainingGuesses = 8;
   remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
-  message.innertText = "";
+  message.innerText = "";
   guessedLettersElement.innerHTML = "";
   getWord();
   guessLetterButton.classList.remove("hide");
+  playAgainButton.classList.add("hide");
   remainingGuessesElement.classList.remove("hide");
   guessedLettersElement.classList.remove("hide");
-  playAgainButton.classList.add("hide")
 });
